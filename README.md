@@ -35,10 +35,10 @@ server.connect(stream)
 await server.update()
 ```
 
-Inside the application, `require('bare-refresh')` returns the host instead of this module:
+Inside the application, `require('bare-refresh/hot')` returns the hooks of the host. It does not depend on anything else, so the rest of `bare-refresh` stays out of the application:
 
 ```js
-const refresh = require('bare-refresh')
+const refresh = require('bare-refresh/hot')
 
 const hot = refresh.hot(module)
 

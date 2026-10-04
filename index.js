@@ -166,7 +166,7 @@ module.exports = exports = class Refresh extends EventEmitter {
     try {
       const loader = new Module.Loader({
         protocol: this._protocol,
-        builtins: { ...this._builtins, 'bare-refresh': this._exports() },
+        builtins: { ...this._builtins, 'bare-refresh/hot': this._exports() },
         imports: this._bundle.imports
       })
 
@@ -594,29 +594,6 @@ module.exports = exports = class Refresh extends EventEmitter {
 
 exports.constants = require('./lib/constants')
 exports.delta = delta
-exports.data = {}
-exports.generation = 0
-
-exports.dispose = function dispose() {}
-
-exports.use = function use() {}
-
-exports.report = function report() {
-  return null
-}
-
-exports.hot = function hot() {
-  return {
-    data: {},
-    accept() {},
-    dispose() {},
-    invalidate() {}
-  }
-}
-
-exports.reload = function reload() {
-  return Promise.resolve(null)
-}
 
 function* targets(entry) {
   if (typeof entry === 'string') {

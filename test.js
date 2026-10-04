@@ -17,7 +17,7 @@ function app(count) {
 
   bundle.write(
     'file:///app/index.js',
-    `const refresh = require('bare-refresh')\n` +
+    `const refresh = require('bare-refresh/hot')\n` +
       `refresh.data.runs = (refresh.data.runs || 0) + 1\n` +
       `module.exports = ${count}\n`
   )
@@ -127,7 +127,7 @@ test('a reload tells the graph it replaces to let go', async (t) => {
   bundle.main = 'file:///app/index.js'
   bundle.write(
     'file:///app/index.js',
-    `const refresh = require('bare-refresh')\n` +
+    `const refresh = require('bare-refresh/hot')\n` +
       `const generation = refresh.generation\n` +
       `refresh.dispose(() => refresh.data.disposed.push(generation))\n`
   )
@@ -156,7 +156,7 @@ test('what a graph hands forward is there for the one that replaces it', async (
   bundle.main = 'file:///app/index.js'
   bundle.write(
     'file:///app/index.js',
-    `const refresh = require('bare-refresh')\n` +
+    `const refresh = require('bare-refresh/hot')\n` +
       `module.exports = refresh.data.carried || null\n` +
       `refresh.dispose(() => { refresh.data.carried = refresh.generation })\n`
   )
@@ -183,7 +183,7 @@ test('a graph that throws disposes nothing', async (t) => {
   bundle.main = 'file:///app/index.js'
   bundle.write(
     'file:///app/index.js',
-    `const refresh = require('bare-refresh')\n` +
+    `const refresh = require('bare-refresh/hot')\n` +
       `if (refresh.generation > 1) {\n` +
       `  refresh.dispose(() => refresh.data.disposed.push('never'))\n` +
       `  throw new Error('no')\n` +
@@ -242,7 +242,7 @@ test('boot runs the application and hands it the transport', async (t) => {
 })
 
 test('the dormant surface answers without a host', (t) => {
-  const refresh = require('bare-refresh')
+  const refresh = require('bare-refresh/hot')
 
   t.is(refresh.generation, 0, 'which is how an application tells a development build from one')
   t.alike(refresh.data, {})
