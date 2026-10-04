@@ -1,0 +1,81 @@
+{
+  "name": "bare-refresh",
+  "version": "0.1.0",
+  "description": "Refresh a running Bare application without restarting it",
+  "exports": {
+    "./package": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./server": {
+      "types": "./server.d.ts",
+      "default": "./server.js"
+    },
+    "./boot": {
+      "types": "./lib/boot.d.ts",
+      "default": "./lib/boot.js"
+    },
+    "./constants": {
+      "types": "./lib/constants.d.ts",
+      "default": "./lib/constants.js"
+    },
+    "./delta": {
+      "types": "./lib/delta.d.ts",
+      "default": "./lib/delta.js"
+    },
+    "./messages": {
+      "types": "./lib/messages.d.ts",
+      "default": "./lib/messages.js"
+    },
+    "./propagate": {
+      "types": "./lib/propagate.d.ts",
+      "default": "./lib/propagate.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "server.js",
+    "server.d.ts",
+    "lib"
+  ],
+  "scripts": {
+    "format": "prettier --write . && lunte --fix",
+    "lint": "prettier --check . && lunte",
+    "test": "brittle-bare --coverage test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/bare-refresh.git"
+  },
+  "author": "Holepunch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/bare-refresh/issues"
+  },
+  "homepage": "https://github.com/holepunchto/bare-refresh#readme",
+  "dependencies": {
+    "bare-bundle": "^1.11.0",
+    "bare-events": "^2.5.4",
+    "bare-module": "^7.1.0",
+    "bare-rpc": "^1.3.8",
+    "compact-encoding": "^3.0.0"
+  },
+  "peerDependencies": {
+    "bare-console": "*"
+  },
+  "peerDependenciesMeta": {
+    "bare-console": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "bare-console": "^6.2.0",
+    "bare-stream": "^2.6.5",
+    "brittle": "^4.3.0",
+    "lunte": "^1.8.0",
+    "prettier": "^3.4.1",
+    "prettier-config-holepunch": "^2.0.0"
+  }
+}
