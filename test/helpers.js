@@ -12,7 +12,7 @@ const dialects = {
   commonjs: {
     extension: '.js',
     hot: 'refresh.hot(module)',
-    refresh: `const refresh = require('bare-refresh')`,
+    refresh: `const refresh = require('bare-refresh/hot')`,
     import: (name, specifier) => `const ${name} = require('${specifier}')`,
     export: (expression) => `module.exports = ${expression}`,
     read: (exports) => exports
@@ -21,7 +21,7 @@ const dialects = {
   esm: {
     extension: '.mjs',
     hot: 'refresh.hot(import.meta)',
-    refresh: `import refresh from 'bare-refresh'`,
+    refresh: `import refresh from 'bare-refresh/hot'`,
     import: (name, specifier) => `import ${name} from '${specifier}'`,
     export: (expression) => `export default ${expression}`,
     read: (exports) => exports.default

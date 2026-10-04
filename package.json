@@ -8,6 +8,10 @@
       "types": "./index.d.ts",
       "default": "./index.js"
     },
+    "./hot": {
+      "types": "./hot.d.ts",
+      "default": "./hot.js"
+    },
     "./server": {
       "types": "./server.d.ts",
       "default": "./server.js"
@@ -36,6 +40,8 @@
   "files": [
     "index.js",
     "index.d.ts",
+    "hot.js",
+    "hot.d.ts",
     "server.js",
     "server.d.ts",
     "lib"

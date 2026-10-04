@@ -5,61 +5,7 @@ import RPC from 'bare-rpc'
 import { Duplex } from 'bare-stream'
 import constants from './lib/constants'
 import delta from './lib/delta'
-
-type Phase = (typeof constants.phase)[keyof typeof constants.phase]
-
-/** A failure, as it is sent to the server. Module URLs are relative to the bundle. */
-interface Report {
-  readonly phase: Phase
-  /** The module the failure happened in, if known. */
-  readonly href: string | null
-  /** The generation of the graph when the failure happened. */
-  readonly generation: number
-  /** Whether the graph is still the one that was running. */
-  readonly intact: boolean
-  readonly name: string
-  readonly message: string
-  readonly stack: string | null
-  readonly code: string | null
-}
-
-/** What a module says about being refreshed, as returned by `hot()`. */
-interface Hot {
-  /** Data that is kept when the module is evaluated again, but not across a reload. */
-  readonly data: Record<string, any>
-
-  /**
-   * Accept changes to the module itself. The module is evaluated again, and its importers keep
-   * what it exported before.
-   */
-  accept(): void
-  /**
-   * Accept changes to the dependencies named by `specifiers`. The module is not evaluated again.
-   * Instead, `onchange` is called with what importing the changed dependency returns.
-   */
-  accept(specifiers: string | string[], onchange?: (exports: unknown) => void): void
-
-  /** Call `fn` with `data` before the module is evaluated again. */
-  dispose(fn: (data: Record<string, any>) => void): void
-
-  /** Take back what was accepted, so that changes propagate past the module again. */
-  invalidate(): void
-}
-
-/**
- * Hooks that let a framework accept changes for modules that do not accept them themselves. Every
- * hook is optional.
- */
-interface Plugin {
-  /** Called with the URL and exports of every module that has just been evaluated. */
-  evaluated?(href: string, exports: unknown): void
-  /** Whether to accept changes to the module at `href` on its behalf. */
-  accepts?(href: string): boolean
-  /** Called with the URLs of the modules evaluated again once a refresh has finished. */
-  settled?(hrefs: string[]): void
-  /** Called with every failure. */
-  failed?(err: unknown, report: Report): void
-}
+import { type Phase, type Plugin, type Report } from './hot'
 
 interface RefreshEvents extends EventMap {
   /** A failure. Unlike most emitters, the host does not throw when nothing listens for it. */
@@ -80,8 +26,7 @@ interface Update {
 
 /**
  * A host that runs an application from a bundle and refreshes it as the bundle changes. Inside the
- * application, `require('bare-refresh')` returns the injected surface of the host, which matches
- * the static members of this class.
+ * application, `require('bare-refresh/hot')` returns the hooks of the host.
  */
 interface Refresh extends EventEmitter<RefreshEvents> {
   /** Data that is kept across reloads. */
@@ -140,31 +85,12 @@ declare class Refresh {
     opts?: { protocol?: unknown; builtins?: Record<string, unknown> | null; entry?: string | URL }
   )
 
-  /** The same object for every graph. Outside a host, an empty object. */
-  static readonly data: Record<string, any>
-  /** The generation of the graph. Outside a host, `0`. */
-  static readonly generation: number
-
-  /** Call `fn` when the graph is disposed before a reload. */
-  static dispose(fn: () => void): void
-  /** Return what the module at `module.url` or `import.meta.url` says about being refreshed. */
-  static hot(module: { url: string | URL }): Hot
-  /** Add a plugin that is removed when the graph is replaced. */
-  static use(plugin: Plugin): void
-  /**
-   * Report a failure that the application caught itself. `phase` defaults to `runtime`. Outside a
-   * host, nothing is reported and `null` is returned.
-   */
-  static report(err: unknown, opts?: { phase?: Phase; href?: string | null }): Report | null
-  /** Build the graph again. Outside a host, resolves with `null`. */
-  static reload(): Promise<Module | null>
-
   static readonly constants: typeof constants
   static readonly delta: typeof delta
 }
 
 declare namespace Refresh {
-  export { type Hot, type Phase, type Plugin, type RefreshEvents, type Report, type Update }
+  export { type Phase, type Plugin, type RefreshEvents, type Report, type Update }
 }
 
 export = Refresh

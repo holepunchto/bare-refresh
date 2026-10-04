@@ -51,7 +51,7 @@ for (const name of Object.keys(dialects)) {
 
     t.alike(
       seen.sort(),
-      [f.href('a'), f.href('b'), f.href('c'), 'builtin:bare-refresh'],
+      [f.href('a'), f.href('b'), f.href('c'), 'builtin:bare-refresh/hot'],
       'the surface the host injected is a module of the graph like any other'
     )
 
