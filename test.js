@@ -5,7 +5,7 @@ const Refresh = require('bare-refresh')
 const RefreshServer = require('bare-refresh/server')
 const boot = require('bare-refresh/boot')
 const delta = require('bare-refresh/delta')
-const { pair, recorder } = require('./test/helpers')
+const { pair } = require('./test/helpers')
 
 const root = new URL('file:///app/')
 
@@ -222,9 +222,7 @@ test('boot runs the application and hands it the transport', async (t) => {
 
   server.connect(a)
 
-  const { console, lines } = recorder()
-
-  const refresh = boot(app(1), { connect: () => b, protocol: module.protocol, console })
+  const refresh = boot(app(1), { connect: () => b, protocol: module.protocol })
 
   await new Promise((resolve) => server.once('connection', resolve))
 
@@ -238,7 +236,6 @@ test('boot runs the application and hands it the transport', async (t) => {
   await reloaded
 
   t.is(refresh.graph.exports, 2, 'and an edit reaches it')
-  t.alike(lines, [['info', 'reloaded 2']], 'which is logged to the console it was given')
 })
 
 test('the dormant surface answers without a host', (t) => {

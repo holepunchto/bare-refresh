@@ -68,14 +68,6 @@
     "bare-rpc": "^1.3.8",
     "compact-encoding": "^3.0.0"
   },
-  "peerDependencies": {
-    "bare-console": "*"
-  },
-  "peerDependenciesMeta": {
-    "bare-console": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "bare-console": "^6.2.0",
     "bare-stream": "^2.6.5",
