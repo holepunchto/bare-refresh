@@ -162,17 +162,3 @@ exports.pair = function pair() {
 
   return [a, b]
 }
-
-exports.recorder = function recorder() {
-  const lines = []
-
-  const log = {}
-
-  for (const level of ['debug', 'info', 'warn', 'error', 'fatal']) {
-    log[level] = (...data) => lines.push([level, data.join(' ')])
-  }
-
-  log.clear = () => {}
-
-  return { console: new Console(log), lines }
-}
