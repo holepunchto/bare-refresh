@@ -1,7 +1,6 @@
 const Bundle = require('bare-bundle')
 const { Duplex } = require('bare-stream')
 
-const Console = require('bare-console')
 const Refresh = require('bare-refresh')
 
 const root = new URL('file:///app/')

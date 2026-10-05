@@ -69,7 +69,6 @@
     "compact-encoding": "^3.0.0"
   },
   "devDependencies": {
-    "bare-console": "^6.2.0",
     "bare-stream": "^2.6.5",
     "brittle": "^4.3.0",
     "lunte": "^1.8.0",
