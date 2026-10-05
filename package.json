@@ -1,6 +1,6 @@
 {
   "name": "bare-refresh",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Refresh a running Bare application without restarting it",
   "exports": {
     "./package": "./package.json",
