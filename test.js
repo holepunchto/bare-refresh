@@ -238,6 +238,26 @@ test('boot runs the application and hands it the transport', async (t) => {
   t.is(refresh.graph.exports, 2, 'and an edit reaches it')
 })
 
+test('boot hands the host to what is attached before the graph starts', async (t) => {
+  const bundle = new Bundle()
+
+  bundle.id = 'failing'
+  bundle.main = 'file:///app/index.js'
+  bundle.write('file:///app/index.js', `throw new Error('no')\n`)
+
+  const reports = []
+
+  const refresh = boot(bundle.unmount(root), {
+    protocol: module.protocol,
+    attach: [(host) => host.on('error', (err, report) => reports.push(report))]
+  })
+
+  await t.exception(refresh.start(), /no/)
+
+  t.is(reports.length, 1, 'a graph that fails on the way up is seen')
+  t.is(reports[0].phase, 'evaluate')
+})
+
 test('the dormant surface answers without a host', (t) => {
   const refresh = require('bare-refresh/hot')
 

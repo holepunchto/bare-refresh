@@ -4,7 +4,9 @@ import Refresh from '..'
 
 /**
  * Create a host for `bundle`, start it, and connect it to a server over the stream that
- * `connect(options)` returns. This is what the generated entry of a development build calls.
+ * `connect(options)` returns. Each function in `attach` is called with the host before it starts,
+ * so that it sees everything the host reports. This is what the generated entry of a development
+ * build calls.
  */
 declare function boot<T>(
   bundle: Bundle | Uint8Array,
@@ -13,6 +15,7 @@ declare function boot<T>(
     options?: T
     protocol?: unknown
     builtins?: Record<string, unknown> | null
+    attach?: ((refresh: Refresh) => void)[]
   }
 ): Refresh
 
