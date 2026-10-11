@@ -10,6 +10,10 @@ import { type Phase, type Plugin, type Report } from './hot'
 interface RefreshEvents extends EventMap {
   /** A failure. Unlike most emitters, the host does not throw when nothing listens for it. */
   error: [err: unknown, report: Report]
+  /**
+   * A graph was disposed before a reload, with its generation. The next graph has not started yet.
+   */
+  dispose: [generation: number]
   /** A new graph was built, with its generation. */
   reload: [generation: number]
   /** Changed modules were evaluated again, with how many there were. */

@@ -149,6 +149,30 @@ test('a reload tells the graph it replaces to let go', async (t) => {
   t.alike(refresh.data.disposed, [1, 2], 'and so did the one after it')
 })
 
+test('the host hears of a graph going between its disposal and the next one starting', async (t) => {
+  const bundle = new Bundle()
+
+  bundle.id = 'ordering'
+  bundle.main = 'file:///app/index.js'
+  bundle.write(
+    'file:///app/index.js',
+    `const refresh = require('bare-refresh/hot')\n` +
+      `refresh.data.order.push('evaluate ' + refresh.generation)\n` +
+      `refresh.dispose(() => refresh.data.order.push('dispose ' + refresh.generation))\n`
+  )
+
+  const refresh = new Refresh(bundle.unmount(root), { protocol: module.protocol })
+
+  refresh.data.order = []
+
+  refresh.on('dispose', (generation) => refresh.data.order.push('host ' + generation))
+
+  await refresh.start()
+  await refresh.reload()
+
+  t.alike(refresh.data.order, ['evaluate 1', 'dispose 1', 'host 1', 'evaluate 2'])
+})
+
 test('what a graph hands forward is there for the one that replaces it', async (t) => {
   const bundle = new Bundle()
 
