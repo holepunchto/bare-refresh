@@ -93,6 +93,14 @@ module.exports = exports = class Refresh extends EventEmitter {
       }
     }
 
+    // Whatever the host shares with every graph can be put back in order here,
+    // with the old graph gone and the next one not yet started.
+    try {
+      this.emit('dispose', this._generation)
+    } catch (err) {
+      this._fail(err, phase.DISPOSE)
+    }
+
     const graph = await this._run()
 
     this.emit('reload', this._generation)
